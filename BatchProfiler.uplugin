@@ -1,0 +1,24 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "Batch Profiler",
+	"Description": "An editor utility for profiling the scene using different cameras",
+	"Category": "Other",
+	"CreatedBy": "Can Cellek",
+	"CreatedByURL": "https://cancellek.com",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": false,
+	"IsBetaVersion": true,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		{
+			"Name": "BatchProfiler",
+			"Type": "Developer",
+			"LoadingPhase": "Default"
+		}
+	]
+}
