@@ -11,12 +11,14 @@
 AProfilingCamera::AProfilingCamera()
 	: IsActiveOnProfiling(false), CameraName(TEXT("")), ProfilerModule(nullptr), ProfilingCameraComponent(nullptr)
 {
+	// Set active on profiling by default
+	IsActiveOnProfiling = true;
+	
 	// Set camera component properties
 	ProfilingCameraComponent = GetCameraComponent();
 	if (ProfilingCameraComponent)
 	{
 		ProfilingCameraComponent->bVisualizeComponent = true; // Show the camera component in the editor viewport
-		ProfilingCameraComponent->bIsEditorOnly = true; // Set the camera component to be editor-only
 		ProfilingCameraComponent->bVisualizeComponent = true; // This is to show the camera in the editor viewport
 		ProfilingCameraComponent->bEditableWhenInherited = true; // Make the camera component editable when inherited
 		ProfilingCameraComponent->Deactivate();
