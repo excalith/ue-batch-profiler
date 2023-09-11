@@ -7,13 +7,14 @@
 	"Category": "Other",
 	"CreatedBy": "Can Cellek",
 	"CreatedByURL": "https://cancellek.com",
-	"DocsURL": "",
+	"DocsURL" : "https://github.com/excalith/ue-batch-profiler/wiki",
 	"MarketplaceURL": "",
 	"SupportURL": "",
-	"CanContainContent": false,
+	"CanContainContent": true,
 	"IsBetaVersion": true,
 	"IsExperimentalVersion": false,
 	"Installed": false,
+	"EnabledByDefault" : true,
 	"Modules": [
 		{
 			"Name": "BatchProfiler",
