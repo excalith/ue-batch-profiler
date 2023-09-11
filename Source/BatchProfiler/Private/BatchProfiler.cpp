@@ -3,6 +3,7 @@
 #include "BatchProfiler.h"
 #include "BatchProfilerSettings.h"
 #include "ISettingsModule.h"
+#include "Framework/Notifications/NotificationManager.h"
 #include "Utilities/Utilities.h"
 
 #pragma region Module Initialization
@@ -91,7 +92,7 @@ void FBatchProfilerModule::StartupModule()
 		TEXT("Batch runs profiling on each ProfilingCamera using UE Insight"),
 		BatchInsightTraceDelegate);
 
-	
+#if PLATFORM_WINDOWS || PLATFORM_LINUX
 	IConsoleManager::Get().RegisterConsoleCommand(
 		TEXT("cp.run.renderdoc"),
 		TEXT("Runs profiling on active camera using RenderDoc"),
@@ -100,8 +101,9 @@ void FBatchProfilerModule::StartupModule()
 		TEXT("cp.batch.renderdoc"),
 		TEXT("Batch runs profiling on each ProfilingCamera profiling using RenderDoc"),
 		BatchRenderDocDelegate);
-
-	UE_LOG(LogTemp, Display, TEXT("Camera Profiler Initialized"));
+#endif
+	
+	UE_LOG(LogTemp, Display, TEXT("Batch Profiler Initialized"));
 }
 
 /**
@@ -120,14 +122,16 @@ void FBatchProfilerModule::ShutdownModule()
 	IConsoleManager::Get().UnregisterConsoleObject(TEXT("cp.prev"));
 
 	IConsoleManager::Get().UnregisterConsoleObject(TEXT("cp.run.trace"));
-	IConsoleManager::Get().UnregisterConsoleObject(TEXT("cp.run.snapshot"));
-	IConsoleManager::Get().UnregisterConsoleObject(TEXT("cp.run.renderdoc"));
-
 	IConsoleManager::Get().UnregisterConsoleObject(TEXT("cp.batch.trace"));
+	IConsoleManager::Get().UnregisterConsoleObject(TEXT("cp.run.snapshot"));
 	IConsoleManager::Get().UnregisterConsoleObject(TEXT("cp.batch.snapshot"));
-	IConsoleManager::Get().UnregisterConsoleObject(TEXT("cp.batch.renderdoc"));
 
-	UE_LOG(LogTemp, Display, TEXT("Camera Profiler Shutdown"));
+#if PLATFORM_WINDOWS || PLATFORM_LINUX
+	IConsoleManager::Get().UnregisterConsoleObject(TEXT("cp.run.renderdoc"));
+	IConsoleManager::Get().UnregisterConsoleObject(TEXT("cp.batch.renderdoc"));
+#endif	
+
+	UE_LOG(LogTemp, Display, TEXT("Batch Profiler Shutdown"));
 }
 #pragma endregion
 
@@ -160,6 +164,8 @@ void FBatchProfilerModule::StartInsightCommand(const TArray<FString>& Args, cons
 	{
 		return;
 	}
+
+	FSlateNotificationManager::Get().SetAllowNotifications(false);
 	
 	if (IsInsightActive)
 	{
@@ -190,6 +196,7 @@ void FBatchProfilerModule::StartRenderDocCommand(const TArray<FString>& Args, co
 		return;
 	}
 
+	FSlateNotificationManager::Get().SetAllowNotifications(false);
 	int FrameCount = BatchProfilerSettings->RenderDocFrameCaptureCount;
 
 	if (Args.Num() >= 1)
@@ -277,6 +284,8 @@ void FBatchProfilerModule::CompleteCapture() const
 	{
 		FUtilities::ExecuteCommand(Command);
 	}
+
+	FSlateNotificationManager::Get().SetAllowNotifications(true);
 	
 	UE_LOG(LogTemp, Warning, TEXT("Capture Complete"));
 	FUtilities::ShowNotification(TEXT("Capture Complete"), true);
